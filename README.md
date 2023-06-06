@@ -1,2 +1,2 @@
-# data_analysis_ai
+# Data Analysis Tool
 Building a tool what I can use to analyse table and databases, writing SQL queries and writing Python code 
