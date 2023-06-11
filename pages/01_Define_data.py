@@ -147,7 +147,7 @@ if st.session_state.column_session_counter == 1:
     elif column_table[(column_table['table_name'] == select_table) & (column_table['column_name'] == column_name)].shape[0] > 0:
         st.warning("Column not added because column name already exists in selected table")
     else:
-        column_table = column_table.concat([column_table, pd.DataFrame({'table_name': [select_table], 'column_name': [column_name], 'column_description': [column_description], 'column_type': [column_type]})], ignore_index=True)
+        column_table = pd.concat([column_table, pd.DataFrame({'table_name': [select_table], 'column_name': [column_name], 'column_description': [column_description], 'column_type': [column_type]})], ignore_index=True)
         st.session_state['column_table'] = column_table
         # refresh the page to see the changes
         st.experimental_rerun()
