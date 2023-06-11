@@ -50,7 +50,7 @@ if reset_response_list:
 
 if st.session_state.session_counter == 1:
     st.session_state.session_counter = 0
-    response, _ = get_response_from_chat_gpt(text_input_for_chat_gpt, context_input)
+    response, _ = get_response_from_chat_gpt(text_input_for_chat_gpt, context=context_input)
     
     user_input_list.append(text_input_for_chat_gpt)
     chatbot_response_list.append(response)
