@@ -3,11 +3,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px
 from utils.da_functions import *
 from PIL import Image
-import plotly.graph_objects as go
-import plotly.io as pio
 import pickle
 
 st.set_page_config(layout='wide', page_title='Data Analysis Dashboard')
