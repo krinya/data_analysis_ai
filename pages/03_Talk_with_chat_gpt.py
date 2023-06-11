@@ -21,7 +21,10 @@ def session_counter():
 # Define tables
 input_message = ""
 with st.form(key='chat_gpt_form', clear_on_submit=True):
-    text_input_for_chat_gpt = st.text_input("Enter your message here", input_message, key='chat_gpt_input')
+    #st.markdown("Message")
+    text_input_for_chat_gpt = st.text_area("Enter your message here", input_message, key='chat_gpt_input')
+    #st.markdown("Context")
+    context_input = st.text_area("Enter your context here", input_message, key='chat_gpt_context')
     
     submitted = st.form_submit_button("Send to ChatGPT", on_click=session_counter)
 
@@ -47,7 +50,7 @@ if reset_response_list:
 
 if st.session_state.session_counter == 1:
     st.session_state.session_counter = 0
-    response, _ = get_response_from_chat_gpt(text_input_for_chat_gpt)
+    response, _ = get_response_from_chat_gpt(text_input_for_chat_gpt, context=context_input)
     
     user_input_list.append(text_input_for_chat_gpt)
     chatbot_response_list.append(response)

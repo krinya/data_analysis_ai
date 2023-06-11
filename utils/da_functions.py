@@ -39,8 +39,12 @@ def generate_answer_using_context(query, context=None, conversation=None):
 
     return answer_message['content'], conversation
 
-
-def get_response_from_chat_gpt(input):
+def get_response_from_chat_gpt(input, context=None):
     # call the chatbot and get the response
-    answer, conversation = generate_answer_using_context(input, context="", conversation=None)
+    if context:
+        context_in=context
+    else:
+        context_in=""
+
+    answer, conversation = generate_answer_using_context(input, context=context_in, conversation=None)
     return answer, conversation
