@@ -193,7 +193,7 @@ if st.session_state.column_delete_counter == 1:
     # refresh the page to see the changes
     st.experimental_rerun()
 
-st.divider()
+st.markdown("***")
 
 st.markdown("### Save the tables")
 st.markdown("Here we can save the tables that we have defined as a pickle file.")

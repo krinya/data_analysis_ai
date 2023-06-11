@@ -4,16 +4,16 @@ import streamlit as st
 import plotly.express as px
 import json
 import re
-
 import openai
-from openai.embeddings_utils import get_embedding, cosine_similarity
+#from openai.embeddings_utils import get_embedding, cosine_similarity
 
 # ##Add API credential variables
 # openai.api_base = open_ai_api_base
 # openai.api_version = '2023-05-15'
-openai.api_key = st.secrets['open_ai']['api_key']
 
 def generate_answer_using_context(query, context=None, conversation=None):
+
+    openai.api_key = st.secrets['open_ai']['api_key']
 
     if conversation is None:
         conversation = [
@@ -24,7 +24,7 @@ def generate_answer_using_context(query, context=None, conversation=None):
     conversation.append({"role": "user", "content": query})
 
     response = openai.ChatCompletion.create(
-        engine='ikea-gpt-35-turbo',
+        model='gpt-3.5-turbo',
         messages=conversation,
         temperature=0.7,
         max_tokens=800,
@@ -41,7 +41,6 @@ def generate_answer_using_context(query, context=None, conversation=None):
 
 
 def get_response_from_chat_gpt(input):
-    # here I would like to call the chatbot and get the response
-    # put your code here
-    answer, conversation = generate_answer_using_context(input, context=None, conversation=None)
+    # call the chatbot and get the response
+    answer, conversation = generate_answer_using_context(input, context="", conversation=None)
     return answer, conversation
