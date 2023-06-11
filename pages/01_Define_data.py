@@ -216,3 +216,26 @@ with col2:
                                         data=pickle.dumps(combined_table),
                                         file_name=filename_to_use,
                                         on_click=download_tables_counter)
+    
+st.markdown("---")
+st.markdown("Context for ChatGpt")
+# make a dropdown with valuies: SQL, Pandas, R, Python
+programing_language = st.selectbox("Select programing language", ['SQL', 'Pandas', 'R', 'Python'], key='programing_language')
+
+full_string = ""
+introduction = f"""Hello I want you to help me to write code in {programing_language}.
+I will give you the context and you will write the code for me. I will give you the table names the table desciption and the list of columns and the column description.
+The database contains the following tables and columns: \n\n """
+full_string += introduction
+
+for t in table_table['table_name'].unique():
+    full_string += f"""The table that is called: '{t}' has the following columns: \n\n"""
+    for c in column_table[column_table['table_name'] == t]['column_name'].values:
+        full_string += f"""'{c}', """
+        #  get the column description
+        column_description = column_table[(column_table['table_name'] == t) & (column_table['column_name'] == c)]['column_description'].values[0]
+        full_string += f"""which is {column_description}. \n\n"""
+    full_string += f""" """
+
+st.text(full_string)
+
