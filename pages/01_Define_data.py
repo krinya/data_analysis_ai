@@ -18,12 +18,26 @@ def table_session_counter():
     st.session_state.table_session_counter = 1
     return st.session_state.table_session_counter
 
+def table_delete_counter():
+    # st.sesson counter intialization
+    if 'table_delete_counter' not in st.session_state:
+        st.session_state.table_delete_counter = 1
+    st.session_state.table_delete_counter = 1
+    return st.session_state.table_delete_counter
+
 def column_session_counter():
     # st.sesson counter intialization
     if 'column_session_counter' not in st.session_state:
         st.session_state.column_session_counter = 1
     st.session_state.column_session_counter = 1
     return st.session_state.column_session_counter
+
+def column_delete_counter():
+    # st.sesson counter intialization
+    if 'column_delete_counter' not in st.session_state:
+        st.session_state.column_delete_counter = 1
+    st.session_state.column_delete_counter = 1
+    return st.session_state.column_delete_counter
 
 def download_tables_counter():
     # st.sesson counter intialization
@@ -75,6 +89,10 @@ if 'table_session_counter' not in st.session_state:
     st.session_state.table_session_counter = 0
 if 'column_session_counter' not in st.session_state:
     st.session_state.column_session_counter = 0
+if 'table_delete_counter' not in st.session_state:
+    st.session_state.table_delete_counter = 0
+if 'column_delete_counter' not in st.session_state:
+    st.session_state.column_delete_counter = 0
 
 if 'user_input_list' not in st.session_state:
     user_input_list = []
@@ -91,7 +109,7 @@ else:
 if st.session_state.table_session_counter == 1:
     st.session_state.table_session_counter = 0
     st.write("Table button was clicked")
-    table_table = table_table.append({'table_name': table_name, 'table_description': table_description}, ignore_index=True)
+    table_table = pd.concat([table_table, pd.DataFrame({'table_name': [table_name], 'table_description': [table_description]})], ignore_index=True)
     st.session_state['table_table'] = table_table
     # refrresg the page
     st.experimental_rerun()
@@ -99,21 +117,59 @@ if st.session_state.table_session_counter == 1:
 if st.session_state.column_session_counter == 1:
     st.session_state.column_session_counter = 0
     st.write("Column button was clicked")
-    column_table = column_table.append({'table_name': select_table, 'column_name': column_name, 'column_description': column_description, 'column_type': column_type}, ignore_index=True)
+    column_table = column_table.concat([column_table, pd.DataFrame({'table_name': [select_table], 'column_name': [column_name], 'column_description': [column_description], 'column_type': [column_type]})], ignore_index=True)
     st.session_state['column_table'] = column_table
     # refrresg the page
     st.experimental_rerun()
 
 st.markdown("### Tables that we have defined")
-st.write(table_table)
+col1, col2 = st.columns([4, 2])
+with col1:
+    st.write(table_table)
+with col2:
+    with st.form(key='delete_table', clear_on_submit=True):
+        st.markdown("### Delete table")
+        st.markdown("Here we can delete a table that we have defined before.")
+        select_table = st.selectbox("Select table", table_table['table_name'].unique(), key='select_table_delete')
+        delete_table = st.form_submit_button("Delete table", on_click=table_delete_counter)
+
 st.markdown("### Columns that we have defined")
-st.write(column_table)
+col1, col2 = st.columns([4, 2])
+with col1:
+    st.write(column_table)
+with col2:
+    column_unique_values = column_table['table_name'] + ' --- ' + column_table['column_name']
+    with st.form(key='delete_column', clear_on_submit=True):
+        st.markdown("### Delete column")
+        st.markdown("Here we can delete a column that we have defined before.")
+        # concat table_name and column_name to get unique values
+        select_column = st.selectbox("Select column", column_unique_values, key='select_column_delete')
+        delete_column = st.form_submit_button("Delete column", on_click=column_delete_counter)
+
+if st.session_state.table_delete_counter == 1:
+    st.session_state.table_delete_counter = 0
+    st.write("Table delete button was clicked")
+    table_table = table_table[table_table['table_name'] != select_table]
+    st.session_state['table_table'] = table_table
+    # refrresg the page
+    st.experimental_rerun()
+
+if st.session_state.column_delete_counter == 1:
+    st.session_state.column_delete_counter = 0
+    st.write("Column delete button was clicked")
+    # split the unique value to get the table_name and column_name
+    table_name, column_name = select_column.split(' --- ')
+    # drop the row from the column_table where both of the values are the same as the selected values
+    column_table = column_table[(column_table['table_name'] != table_name) | (column_table['column_name'] != column_name)]
+    st.session_state['column_table'] = column_table
+    # refrresg the page
+    st.experimental_rerun()
 
 st.markdown("***")
 
 st.markdown("### Save the tables")
 st.markdown("Here we can save the tables that we have defined as a pickle file.")
-st.markdown("We can use these to load the tables in the future.")
+st.markdown("We can use the file to load the tables in the future.")
 
 # create a dictionary with the table_table and the column_table and save it as a pickle file
 combined_table = {'table_table': table_table, 'column_table': column_table}
@@ -134,7 +190,7 @@ with col2:
                                         on_click=download_tables_counter)
 
 st.markdown("### Load the tables from file")
-st.markdown("Here you can load the tables that you saved before.")
+st.markdown("Here you can load the tables that you saved before by selecting the pickle file that you saved.")
 
 uploaded_file = st.file_uploader("Upload File that you saved before")
 if uploaded_file is not None:
