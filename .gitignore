@@ -1,2 +1,5 @@
 credentials.py
 .streamlit/secrets.toml
+utils/__pycache__/*
+utils/__pycache__/
+utils/__pycache__

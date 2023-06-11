@@ -9,6 +9,16 @@ import plotly.io as pio
 
 st.set_page_config(layout='wide', page_title='Data Analysis Dashboard')
 st.title("Test Chat GPT")
+
+# get context
+if 'full_string' not in st.session_state:
+    st.session_state.full_string = ""
+    st.warning("Please define the data first, because there is no context yet.")
+else:
+    context_from_other_pages = st.session_state.full_string
+
+
+
 reset_response_list = st.sidebar.button("Reset response list")
 
 def session_counter():

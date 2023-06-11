@@ -224,7 +224,8 @@ programing_language = st.selectbox("Select programing language", ['SQL', 'Pandas
 
 full_string = ""
 introduction = f"""Hello I want you to help me to write code in {programing_language}.
-I will give you the context and you will write the code for me. I will give you the table names the table desciption and the list of columns and the column description.
+I will give you the context and you will write the code for me. In the context I will give you the table names the table desciption and the list of columns and the column description.
+I want you to help me write the code or the query that I need to get the data that I want. I do not want the results, but the code that I can run myself.
 The database contains the following tables and columns: \n\n """
 full_string += introduction
 
@@ -238,4 +239,7 @@ for t in table_table['table_name'].unique():
     full_string += f""" """
 
 st.text(full_string)
+
+# save it to session state
+st.session_state['full_string'] = full_string
 
