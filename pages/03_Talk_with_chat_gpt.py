@@ -10,11 +10,12 @@ st.title("Test Chat GPT")
 # get context
 if 'full_string' not in st.session_state:
     st.session_state.full_string = ""
-    st.warning("Please define the data first, because there is no context yet.")
+    context_from_other_pages = st.session_state.full_string
 else:
     context_from_other_pages = st.session_state.full_string
 
-
+if context_from_other_pages == "":
+    st.warning("Please define the data first, because there is no context yet.")
 
 reset_response_list = st.sidebar.button("Reset response list")
 
@@ -29,10 +30,9 @@ def session_counter():
 input_message = ""
 with st.form(key='chat_gpt_form', clear_on_submit=True):
     #st.markdown("Message")
-    text_input_for_chat_gpt = st.text_area("Enter your message here", input_message, key='chat_gpt_input')
+    text_input_for_chat_gpt = st.text_area("Enter your message or question here related to the data.", input_message, key='chat_gpt_input')
     #st.markdown("Context")
-    context_input = st.text_area("Enter your context here", input_message, key='chat_gpt_context')
-    
+    #context_input = st.text_area("Enter your context here", input_message, key='chat_gpt_context')
     submitted = st.form_submit_button("Send to ChatGPT", on_click=session_counter)
 
 if 'session_counter' not in st.session_state:
@@ -57,7 +57,7 @@ if reset_response_list:
 
 if st.session_state.session_counter == 1:
     st.session_state.session_counter = 0
-    response, _ = get_response_from_chat_gpt(text_input_for_chat_gpt, context=context_input)
+    response, _ = get_response_from_chat_gpt(text_input_for_chat_gpt, context=context_from_other_pages)
     
     user_input_list.append(text_input_for_chat_gpt)
     chatbot_response_list.append(response)
