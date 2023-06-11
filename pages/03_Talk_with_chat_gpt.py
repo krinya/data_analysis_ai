@@ -66,19 +66,19 @@ if st.session_state.session_counter == 1:
     st.session_state.chatbot_response_list = chatbot_response_list
 
     # reverse the lists
-    user_input_list.reverse()
-    chatbot_response_list.reverse()
+    user_input_list_reverse = user_input_list[::-1]
+    chatbot_response_list_reverse = chatbot_response_list[::-1]
 
     for i in range(len(user_input_list)):
         col1, col2, col3 = st.columns([1,12,1])
         with col1:
             st.markdown(f"**You:**")
         with col2:
-            st.markdown(f"*{user_input_list[i]}*")
+            st.markdown(f"*{user_input_list_reverse[i]}*")
         with col1:
             st.markdown(f"**ChatGPT:**")
         with col2:
-            st.markdown(f"*{chatbot_response_list[i]}*")
+            st.markdown(f"*{chatbot_response_list_reverse[i]}*")
 
     
 
