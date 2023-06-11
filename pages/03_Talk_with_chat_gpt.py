@@ -58,8 +58,6 @@ if reset_response_list:
 if st.session_state.session_counter == 1:
     st.session_state.session_counter = 0
     response, _ = get_response_from_chat_gpt(text_input_for_chat_gpt, context=context_from_other_pages)
-# if len of user_input_list is not 0
-if len(user_input_list) != 0:
     user_input_list.append(text_input_for_chat_gpt)
     chatbot_response_list.append(response)
      # append sessioin state list
@@ -69,7 +67,8 @@ if len(user_input_list) != 0:
     # reverse the lists
     user_input_list_reverse = user_input_list[::-1]
     chatbot_response_list_reverse = chatbot_response_list[::-1]
-
+# if len of user_input_list is not 0
+if len(user_input_list) != 0:
     for i in range(len(user_input_list)):
         col1, col2, col3 = st.columns([1,12,1])
         with col1:
