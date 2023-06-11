@@ -67,8 +67,6 @@ if st.session_state.session_counter == 1:
     # reverse the lists
     user_input_list_reverse = user_input_list[::-1]
     chatbot_response_list_reverse = chatbot_response_list[::-1]
-# if len of user_input_list is not 0
-if len(user_input_list) != 0:
     for i in range(len(user_input_list)):
         col1, col2, col3 = st.columns([1,12,1])
         with col1:
