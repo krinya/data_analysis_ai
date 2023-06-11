@@ -6,6 +6,7 @@ from utils.da_functions import *
 from PIL import Image
 import plotly.graph_objects as go
 import plotly.io as pio
+import pickle
 
 st.set_page_config(layout='wide', page_title='Data Analysis Dashboard')
 st.title("Define Data")
@@ -23,6 +24,13 @@ def column_session_counter():
         st.session_state.column_session_counter = 1
     st.session_state.column_session_counter = 1
     return st.session_state.column_session_counter
+
+def download_tables_counter():
+    # st.sesson counter intialization
+    if 'download_tables_counter' not in st.session_state:
+        st.session_state.download_tables_counter = 1
+    st.session_state.download_tables_counter = 1
+    return st.session_state.download_tables_counter
 
 if 'table_table' not in st.session_state:
     table_table = pd.DataFrame(columns=['table_name', 'table_description'])
@@ -101,4 +109,39 @@ st.write(table_table)
 st.markdown("### Columns that we have defined")
 st.write(column_table)
 
+st.markdown("***")
 
+st.markdown("### Save the tables")
+st.markdown("Here we can save the tables that we have defined as a pickle file.")
+st.markdown("We can use these to load the tables in the future.")
+
+# create a dictionary with the table_table and the column_table and save it as a pickle file
+combined_table = {'table_table': table_table, 'column_table': column_table}
+datetime = pd.Timestamp.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    custom_filename = st.text_input("Enter custom filename if you want", key='file_name')
+    if custom_filename != '':
+        filename_to_use = f'{custom_filename}.pkl'
+    else:
+        filename_to_use = f'da_tool_export_{datetime}.pkl'
+with col2:
+    download_tables = st.download_button(label="Download tables",
+                                        data=pickle.dumps(combined_table),
+                                        file_name=filename_to_use,
+                                        on_click=download_tables_counter)
+
+st.markdown("### Load the tables from file")
+st.markdown("Here you can load the tables that you saved before.")
+
+uploaded_file = st.file_uploader("Upload File that you saved before")
+if uploaded_file is not None:
+    uploaded_dict = pickle.load(uploaded_file)
+    uploaded_table_table = uploaded_dict['table_table']
+    uploaded_column_table = uploaded_dict['column_table']
+    st.write(uploaded_table_table)
+    st.write(uploaded_column_table)
+    st.session_state['table_table'] = uploaded_table_table
+    st.session_state['column_table'] = uploaded_column_table
