@@ -22,7 +22,8 @@ def generate_answer_using_context(query, context=None, conversation=None):
 
     if api_key_custom_input == "":
         st.error("Please enter your OpenAI API key on the front page.")
-        
+        return "No API key entered.", "No API key entered."
+
     if conversation is None:
         conversation = [
             {"role": "system", "content": "You are a helpful assistant."},
