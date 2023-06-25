@@ -1,11 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px
 from utils.da_functions import *
 from PIL import Image
-import plotly.graph_objects as go
-import plotly.io as pio
 import pickle
 
 st.set_page_config(layout='wide', page_title='Data Analysis Dashboard')
@@ -224,7 +221,8 @@ programing_language = st.selectbox("Select programing language", ['SQL', 'Pandas
 
 full_string = ""
 introduction = f"""Hello I want you to help me to write code in {programing_language}.
-I will give you the context and you will write the code for me. I will give you the table names the table desciption and the list of columns and the column description.
+I will give you the context and you will write the code for me. In the context I will give you the table names the table desciption and the list of columns and the column description.
+I want you to help me write the code or the query that I need to get the data that I want. I do not want the results, but the code that I can run myself.
 The database contains the following tables and columns: \n\n """
 full_string += introduction
 
@@ -237,5 +235,8 @@ for t in table_table['table_name'].unique():
         full_string += f"""which is {column_description}. \n\n"""
     full_string += f""" """
 
-st.text(full_string)
+#st.text(full_string)
+
+# save it to session state
+st.session_state['full_string'] = full_string
 

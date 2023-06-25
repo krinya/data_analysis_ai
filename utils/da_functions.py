@@ -13,7 +13,16 @@ import openai
 
 def generate_answer_using_context(query, context=None, conversation=None):
 
-    openai.api_key = st.secrets['open_ai']['api_key']
+    try:
+        openai.api_key = st.secrets['open_ai']['api_key']
+        api_key_custom_input = st.secrets['open_ai']['api_key']
+    except:
+        openai.api_key  = st.session_state['openai_api_key']
+        api_key_custom_input = st.session_state['openai_api_key']
+
+    if api_key_custom_input == "":
+        st.error("Please enter your OpenAI API key on the front page.")
+        return "No API key entered.", "No API key entered."
 
     if conversation is None:
         conversation = [
