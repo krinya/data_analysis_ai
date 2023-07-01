@@ -50,6 +50,13 @@ def data_description_counter():
     st.session_state.data_description_counter = 1
     return st.session_state.data_description_counter
 
+def programing_language_counter():
+    # st.sesson counter intialization
+    if 'programing_language_counter' not in st.session_state:
+        st.session_state.programing_language_counter = 1
+    st.session_state.programing_language_counter = 1
+    return st.session_state.programing_language_counter
+
 if 'table_table' not in st.session_state:
     table_table = pd.DataFrame(columns=['table_name', 'table_description'])
     st.session_state['table_table'] = table_table
@@ -197,7 +204,9 @@ st.markdown("Here we can save the tables that we have defined as a pickle file."
 st.markdown("We can use the file to load the tables in the future.")
 
 # create a dictionary with the table_table and the column_table and save it as a pickle file
-combined_table = {'table_table': table_table, 'column_table': column_table}
+combined_table = {'table_table': table_table,
+                  'column_table': column_table}
+
 datetime = pd.Timestamp.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 col1, col2 = st.columns([2, 1])
@@ -208,26 +217,55 @@ with col1:
         filename_to_use = f'{custom_filename}.pkl'
     else:
         filename_to_use = f'da_tool_export_{datetime}.pkl'
-with col2:
     download_tables = st.download_button(label="Download tables",
                                         data=pickle.dumps(combined_table),
                                         file_name=filename_to_use,
                                         on_click=download_tables_counter)
     
+st.session_state['combined_table'] = combined_table
+
+st.markdown("---")
+st.markdown("### Current tables")
+st.markdown("### Table table")
+st.dataframe(combined_table['table_table'])
+st.markdown("### Column table")
+st.dataframe(combined_table['column_table'])
+
 st.markdown("---")
 st.markdown("Context for ChatGpt")
 # make a dropdown with valuies: SQL, Pandas, R, Python
-programing_language = st.selectbox("Select programing language", ['SQL', 'Pandas', 'R', 'Python'], key='programing_language')
+programing_language_options = ['SQL', 'Python', 'Python - Pandas', 'R']
+if 'programing_language' not in st.session_state:
+    st.session_state['programing_language'] = 'SQL'
+    st.session_state['programing_language_counter'] = 0
+programing_language = st.selectbox("Select programing language", programing_language_options,
+                                   index=programing_language_options.index(st.session_state['programing_language']),
+                                   key='programing_language_key', on_change=programing_language_counter)
+
+if st.session_state.programing_language_counter == 1:
+    st.session_state.programing_language_counter = 0
+    st.session_state['programing_language'] = programing_language
 
 full_string = ""
-introduction = f"""Hello I want you to help me to write code in {programing_language}.
-I will give you the context and you will write the code for me. In the context I will give you the table names the table desciption and the list of columns and the column description.
-I want you to help me write the code or the query that I need to get the data that I want. I do not want the results, but the code that I can run myself.
-The database contains the following tables and columns: \n\n """
+if programing_language == 'Python':
+    introduction = f"""Hello I want you to help me to write code in {programing_language}.
+    I will give you the context and you need to write the code for me in {programing_language}.
+    In the context I will give you the table names, you can assume that it is already put in a pandas dataframe, you do not need to import them from the sql database.
+    I will also give you the table desciption and the list of columns in the table and the column description.
+    I want you to help me write the {programing_language} code.
+    I can run the code by myself.
+    The data contains the following pandas dataframes: \n\n """
+else:
+    introduction = f"""Hello I want you to help me to write code in {programing_language}.
+    I will give you the context and you need to write the code for me in {programing_language}.
+    In the context I will give you the table names the table desciption and the list of columns and the column description.
+    I want you to help me write the code or the query that I need to get the data that I want.
+    I do not want the results, but the code that I can run myself.
+    The database contains the following tables: \n\n """
 full_string += introduction
 
 for t in table_table['table_name'].unique():
-    full_string += f"""The table that is called: '{t}' has the following columns: \n\n"""
+    full_string += f"""The table that is called: '{t}' contains data about: {table_table[table_table['table_name'] == t]['table_description'].values[0]} and has the following columns: \n\n"""
     for c in column_table[column_table['table_name'] == t]['column_name'].values:
         full_string += f"""'{c}', """
         #  get the column description
@@ -235,7 +273,7 @@ for t in table_table['table_name'].unique():
         full_string += f"""which is {column_description}. \n\n"""
     full_string += f""" """
 
-#st.text(full_string)
+st.text(full_string)
 
 # save it to session state
 st.session_state['full_string'] = full_string

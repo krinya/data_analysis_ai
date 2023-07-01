@@ -7,11 +7,8 @@ import re
 import openai
 #from openai.embeddings_utils import get_embedding, cosine_similarity
 
-# ##Add API credential variables
-# openai.api_base = open_ai_api_base
-# openai.api_version = '2023-05-15'
 
-def generate_answer_using_context(query, context=None, conversation=None):
+def generate_answer_using_context(query, context, conversation):
 
     try:
         openai.api_key = st.secrets['open_ai']['api_key']
@@ -24,36 +21,30 @@ def generate_answer_using_context(query, context=None, conversation=None):
         st.error("Please enter your OpenAI API key on the front page.")
         return "No API key entered.", "No API key entered."
 
-    if conversation is None:
-        conversation = [
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "assistant", "content": context},
+    if (conversation is None) or (conversation == ""):
+        st.session_state.previus_conversations = [
+            {"role": "system", "content": "You are a helpful assistant that writes code and queries for the users."},
+            {"role": "assistant", "content": context}
         ]
 
-    conversation.append({"role": "user", "content": query})
+    st.session_state.previus_conversations.append(
+        {"role": "user", "content": query}
+    )
+
+    st.write(st.session_state.previus_conversations)
 
     response = openai.ChatCompletion.create(
         model='gpt-3.5-turbo',
-        messages=conversation,
+        messages=st.session_state.previus_conversations,
         temperature=0.7,
-        max_tokens=800,
+        max_tokens=1000,
         top_p=0.95,
         frequency_penalty=0,
         presence_penalty=0,
         stop=None
     )
-
     answer_message = response['choices'][0]['message']
-    conversation.append(answer_message)
+    st.sidebar.write(response['usage'])
+    st.session_state.previus_conversations.append(answer_message)
 
-    return answer_message['content'], conversation
-
-def get_response_from_chat_gpt(input, context=None):
-    # call the chatbot and get the response
-    if context:
-        context_in=context
-    else:
-        context_in=""
-
-    answer, conversation = generate_answer_using_context(input, context=context_in, conversation=None)
-    return answer, conversation
+    return answer_message['content'], st.session_state.previus_conversations

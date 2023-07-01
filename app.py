@@ -27,7 +27,8 @@ st.write(last_update)
 
 
 st.markdown("### Give your OpenAI API key to be able to use the dashboard")
-st.markdown("You can create one on https://beta.openai.com/account/api-keys). Once you create it you can copy it and paste it in the field below.")
+st.markdown(f"""You can create one on https://beta.openai.com/account/api-keys.
+            Once you create it you can copy it and paste it in the field below.""")
 
 col1, col2 = st.columns([1,1])
 with col1:

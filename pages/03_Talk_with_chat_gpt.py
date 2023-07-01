@@ -14,10 +14,17 @@ if 'full_string' not in st.session_state:
 else:
     context_from_other_pages = st.session_state.full_string
 
+if 'previus_conversations' not in st.session_state:
+    st.session_state.previus_conversations = ""
+    previus_conversations = st.session_state.previus_conversations
+else:
+    previus_conversations = st.session_state.previus_conversations
+
 if context_from_other_pages == "":
-    st.warning("Please define the data first, because there is no context yet.")
+    st.warning(f"""Please define the data first, because there is no context yet.""")
 
 reset_response_list = st.sidebar.button("Reset response list")
+reset_previus_conversations = st.sidebar.button("Reset previus conversations")
 
 def session_counter():
     # st.sesson counter intialization
@@ -55,9 +62,16 @@ if reset_response_list:
     st.session_state['user_input_list'] = user_input_list
     st.session_state['chatbot_response_list'] = chatbot_response_list
 
+# reset previus conversations
+if reset_previus_conversations:
+    previus_conversations = ""
+    st.session_state['previus_conversations'] = previus_conversations
+
 if st.session_state.session_counter == 1:
     st.session_state.session_counter = 0
-    response, _ = get_response_from_chat_gpt(text_input_for_chat_gpt, context=context_from_other_pages)
+    st.write("ChatGPT is thinking...")
+    # generate answer
+    response, _ = generate_answer_using_context(text_input_for_chat_gpt, context_from_other_pages, st.session_state.previus_conversations)
     user_input_list.append(text_input_for_chat_gpt)
     chatbot_response_list.append(response)
      # append sessioin state list
