@@ -89,12 +89,12 @@ if st.session_state.session_counter == 1:
                 st.markdown(f""":thinking_face:""" + f""" <b>You</b>""", unsafe_allow_html=True)
             with col2:
                 st.markdown(f"""
-                            *** {user_input_list_reverse[i]} ***
-                            """)
+                            <b>{user_input_list_reverse[i]}</b>
+                            """, unsafe_allow_html=True)
             with col1:
                 st.markdown(f""":robot_face:""" + f"""**ChatGPT:**""", unsafe_allow_html=True)
             with col2:
-                st.markdown(f"{chatbot_response_list_reverse[i]}")
+                st.markdown(f"""{chatbot_response_list_reverse[i]}""", unsafe_allow_html=True)
             st.markdown("---")
 
         st.sidebar.markdown(f"""Monitor you costs on the folowing link [here](https://platform.openai.com/account/usage)""")
@@ -109,11 +109,11 @@ if st.session_state.session_counter == 0:
             st.markdown(f""":thinking_face:""" + f""" <b>You</b>""", unsafe_allow_html=True)
         with col2:
             st.markdown(f"""
-                        **{user_input_list_reverse[i]}**
-                        """)
+                        <br>{user_input_list_reverse[i]}</b>
+                        """, unsafe_allow_html=True)
         with col1:
             st.markdown(f""":robot_face:""" + f"""**ChatGPT:**""", unsafe_allow_html=True)
         with col2:
-            st.markdown(f"{chatbot_response_list_reverse[i]}")
+            st.markdown(f"""{chatbot_response_list_reverse[i]}""", unsafe_allow_html=True)
         st.markdown("---")
 
