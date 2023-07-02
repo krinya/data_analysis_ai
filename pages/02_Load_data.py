@@ -6,7 +6,7 @@ from PIL import Image
 import pickle
 
 st.set_page_config(layout='wide', page_title='Data Analysis Dashboard')
-st.title("Define Data")
+st.title("Load Data")
 
 if 'table_table' not in st.session_state:
     table_table = pd.DataFrame(columns=['table_name', 'table_description'])
@@ -22,7 +22,7 @@ else:
 
 
 st.markdown("### Load the tables from saved file")
-st.markdown("Here you can load the tables that you saved before by selecting the pickle file that you saved.")
+st.markdown("Here you can load the tables that you saved before by selecting the pickle file that you saved on the 'Define data' page.")
 st.markdown("Once the tables are loaded, you can look at it and delete/ modify tables and columns on the 'Define data' page.")
 
 uploaded_file = st.file_uploader("Upload File that you saved before")
