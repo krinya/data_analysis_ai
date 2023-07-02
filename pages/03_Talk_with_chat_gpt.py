@@ -109,7 +109,7 @@ if st.session_state.session_counter == 0:
             st.markdown(f""":thinking_face:""" + f""" <b>You</b>""", unsafe_allow_html=True)
         with col2:
             st.markdown(f"""
-                        <br>{user_input_list_reverse[i]}</b>
+                        <b>{user_input_list_reverse[i]}</b>
                         """, unsafe_allow_html=True)
         with col1:
             st.markdown(f""":robot_face:""" + f"""**ChatGPT:**""", unsafe_allow_html=True)
