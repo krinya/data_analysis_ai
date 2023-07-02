@@ -248,26 +248,27 @@ if st.session_state.programing_language_counter == 1:
 
 full_string = ""
 if programing_language == 'Python':
-    introduction = f"""Hello I want you to help me to write code in {programing_language}.
-    I will give you the context and you need to write the code for me in {programing_language}.
-    In the context I will give you the table names, you can assume that it is already put in a pandas dataframe, you do not need to import them from the sql database.
-    I will also give you the table desciption and the list of columns in the table and the column description.
-    I want you to help me write the {programing_language} code.
-    I can run the code by myself.
-    The data contains the following pandas dataframes: \n\n """
+    introduction = f"""Hello I want you to help me to write code in {programing_language}. \n
+I will give you the context and you need to write the code for me in {programing_language}.
+In the context I will give you the table names, you can assume that it is already put in a pandas dataframe, you do not need to import them from the sql database.
+I will also give you the table desciption and the list of columns in the table and the column description.
+I want you to help me write the {programing_language} code.
+I can run the code by myself.
+The data contains the following pandas dataframes:\n\n"""
 else:
     introduction = f"""Hello I want you to help me to write code in {programing_language}.
-    I will give you the context and you need to write the code for me in {programing_language}.
-    In the context I will give you the table names the table desciption and the list of columns and the column description.
-    I want you to help me write the code or the query that I need to get the data that I want.
-    I do not want the results, but the code that I can run myself.
-    The database contains the following tables: \n\n """
+I will give you the context and you need to write the code for me in {programing_language}.
+In the context I will give you the table names the table desciption and the list of columns and the column description.
+I want you to help me write the code or the query that I need to get the data that I want.
+I do not want the results, but the code that I can run myself.
+The database contains the following tables:\n\n"""
 full_string += introduction
 
 for t in table_table['table_name'].unique():
-    full_string += f"""The table that is called: '{t}' contains data about: {table_table[table_table['table_name'] == t]['table_description'].values[0]} and has the following columns: \n\n"""
+    full_string += f"""The table that is called: '{t}' contains data about: {table_table[table_table['table_name'] == t]['table_description'].values[0]}.
+It is already a pandas dataframe and has the following columns:\n\n"""
     for c in column_table[column_table['table_name'] == t]['column_name'].values:
-        full_string += f"""'{c}', """
+        full_string += f"""* '{c}': """
         #  get the column description
         column_description = column_table[(column_table['table_name'] == t) & (column_table['column_name'] == c)]['column_description'].values[0]
         full_string += f"""which is {column_description}. \n\n"""

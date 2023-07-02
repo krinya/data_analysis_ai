@@ -16,14 +16,20 @@ def openai_api_key_counter():
 
 st.markdown("# Data Analysis Dashboard - Starting Page")
 st.markdown("The code of the dashboard was last updated on: ")
-# get the latest update from the github repo
-os.path.getmtime('pages')
 # convert it to datetime and set it to Amsterdam timezone
-last_update = datetime.datetime.fromtimestamp(os.path.getmtime('pages'))
-last_update = last_update.astimezone(tz=pytz.timezone('Europe/Amsterdam'))
-# get only the date
-last_update = last_update.date()
-st.write(last_update)
+
+folder_path = 'pages'
+latest_date = None
+
+for file_name in os.listdir(folder_path):
+    file_path = os.path.join(folder_path, file_name)
+    if os.path.isfile(file_path):
+        file_mtime = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
+        file_mtime = file_mtime.astimezone(pytz.timezone('Europe/Amsterdam')).date()
+        
+        if latest_date is None or file_mtime > latest_date:
+            latest_date = file_mtime
+st.write(latest_date)
 
 
 st.markdown("### Give your OpenAI API key to be able to use the dashboard")

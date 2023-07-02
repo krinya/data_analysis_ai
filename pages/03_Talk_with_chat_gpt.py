@@ -24,7 +24,9 @@ if context_from_other_pages == "":
     st.warning(f"""Please define the data first, because there is no context yet.""")
 
 reset_response_list = st.sidebar.button("Reset response list")
+st.sidebar.markdown("Press this if you do not want to see the previus conversations in the chat.")
 reset_previus_conversations = st.sidebar.button("Reset previus conversations")
+st.sidebar.markdown("Press this if you do not want to give the previus conversations as context.")
 
 def session_counter():
     # st.sesson counter intialization
@@ -92,6 +94,8 @@ if st.session_state.session_counter == 1:
         with col2:
             st.markdown(f"{chatbot_response_list_reverse[i]}")
         st.markdown("---")
+
+    st.sidebar.markdonw(f"""Monitor you costs on the folowing link [here](https://platform.openai.com/account/usage)""")
 
     
 

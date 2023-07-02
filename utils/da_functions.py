@@ -31,8 +31,6 @@ def generate_answer_using_context(query, context, conversation):
         {"role": "user", "content": query}
     )
 
-    st.write(st.session_state.previus_conversations)
-
     response = openai.ChatCompletion.create(
         model='gpt-3.5-turbo',
         messages=st.session_state.previus_conversations,
