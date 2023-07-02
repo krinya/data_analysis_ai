@@ -95,7 +95,7 @@ if st.session_state.session_counter == 1:
             st.markdown(f"{chatbot_response_list_reverse[i]}")
         st.markdown("---")
 
-    st.sidebar.markdonw(f"""Monitor you costs on the folowing link [here](https://platform.openai.com/account/usage)""")
+    st.sidebar.markdown(f"""Monitor you costs on the folowing link [here](https://platform.openai.com/account/usage)""")
 
     
 
