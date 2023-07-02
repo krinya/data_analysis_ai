@@ -94,7 +94,7 @@ st.markdown("You can do this either importing a CSV file or add your data manual
 st.markdown("Once you define the tables and the columns you can save it for latter use. Once you saved it you can load it later on the 'Load data' page.")
 st.markdown("(The dashboard do not share this data with anyone, it is stored on your local machine for only a given session.)")
 
-st.markdown("#### 3. Ask your questions in the Chat tab.")
+st.markdown("#### 3. Ask your questions in the 'Talk with Chat GPT' page.")
 st.markdown("Once you have your tables defined you can ask questions in the 'Talk with Chat GPT' page. Where you ask your questions and the Chat GPT will give you the answer.")
 
 folder_path = 'pages'
