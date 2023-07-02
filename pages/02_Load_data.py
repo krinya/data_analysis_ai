@@ -21,7 +21,7 @@ else:
     column_table = st.session_state.column_table
 
 
-st.markdown("### Load the tables from file")
+st.markdown("### Load the tables from saved file")
 st.markdown("Here you can load the tables that you saved before by selecting the pickle file that you saved.")
 st.markdown("Once the tables are loaded, you can look at it and delete/ modify tables and columns on the 'Define data' page.")
 

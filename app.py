@@ -54,6 +54,7 @@ if st.session_state.openai_api_key_counter == 1:
     st.session_state.openai_api_key_counter = 0
     st.session_state['openai_api_key'] = openai_api_key
 
-with col2:
-    st.markdown("Your saved OpenAI API key:")
-    st.markdown(st.session_state['openai_api_key'])
+st.markdown("Your saved OpenAI API key:")
+st.markdown(f"""**{st.session_state['openai_api_key']}**""")
+st.markdown(f"""Do not forget to save it somewhere on your local machine in a text file as well, because you might need it in the future!))""")
+

@@ -57,6 +57,13 @@ def programing_language_counter():
     st.session_state.programing_language_counter = 1
     return st.session_state.programing_language_counter
 
+def table_csv_counter():
+    # st.sesson counter intialization
+    if 'table_csv_counter' not in st.session_state:
+        st.session_state.table_csv_counter = 0
+    st.session_state.table_csv_counter = 1
+    return st.session_state.table_csv_counter
+
 if 'table_table' not in st.session_state:
     table_table = pd.DataFrame(columns=['table_name', 'table_description'])
     st.session_state['table_table'] = table_table
@@ -69,9 +76,79 @@ if 'column_table' not in st.session_state:
 else:
     column_table = st.session_state.column_table
 
-tab1, tab2, tab3 = st.tabs(['Describe data', 'Add table', 'Add column'])
+if 'table_csv_counter' not in st.session_state:
+    st.session_state['table_csv_counter'] = 0
+
+column_type_input_list = ['Select', 'int', 'binary', 'float', 'string', 'date', 'datetime']
+
+tab1, tab2, tab3, tab4 = st.tabs(['Upload as a CSV', 'Describe data', 'Add table', 'Add column'])
 
 with tab1:
+    st.markdown("### Upload table as a CSV")
+    st.markdown("Here you can upload your data as a CSV file. Then name and select columns that you want to give for the tool.")
+    col1, col2 = st.columns([2, 2])
+    with col1:
+        uploaded_csv_file = st.file_uploader("Choose a CSV file", type="csv")
+    with col2:
+        show_imported_data_head = st.checkbox("Show imported data head", key='show_imported_data_head', value=False)
+    if uploaded_csv_file is not None:
+        imported_df = pd.read_csv(uploaded_csv_file)
+        if show_imported_data_head:
+            st.dataframe(imported_df.head(10))
+        st.markdown("### Name your table")
+        col1, col2 = st.columns([2, 4])
+        with col1:
+            table_name_csv = st.text_input("Enter table name")
+        with col2:
+            table_description_csv = st.text_area("Enter table description")
+        st.markdown("### Add column to table")
+        st.markdown("Here we list to all your columns ion the table to define them. You can select the columns you want to import and give some description about it and then select the column type.")
+        col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
+        # get all colnames from imported_df
+        colnames = imported_df.columns
+        # get all coltypes from imported_df
+        coltypes = imported_df.dtypes
+        # create a pandas table with colnames, coldescription and coltype
+        column_table_csv = pd.DataFrame(columns=['table_name', 'column_name', 'column_description', 'column_type'])
+        # in a for loop create a selectbox for each column
+        col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
+        with col1:
+            st.markdown("#### Select columns to import")
+        with col2:
+            st.markdown("#### Describe columns")
+        with col3:
+            st.markdown("#### Select column type")
+        for c in range(len(colnames)):
+            col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
+            with col1:
+                add_colukmn_cb = st.checkbox(f"""**{colnames[c]}**""", key=f"""column_name_{c}""")
+            with col2:
+                column_description = st.text_area("Enter column description if you want to share more information about it",
+                                                  key=f"""column_description_{c}""")
+            with col3:
+                column_type = st.selectbox("Select column type", column_type_input_list,
+                                           key=f"""column_type_{c}""")
+                st.write(f"""detected as a {coltypes[c]}, please select the correct type""")
+            if add_colukmn_cb:
+                column_table_csv = pd.concat([column_table_csv, pd.DataFrame({'table_name': [table_name_csv], 'column_name': [colnames[c]], 'column_description': [column_description], 'column_type': [column_type]})], ignore_index=True)
+            if add_colukmn_cb == False:
+                # delete the row from column_table_csv
+                column_table_csv = column_table_csv[column_table_csv['column_name'] != colnames[c]]
+            
+
+        add_csv_table = st.button("Add table", on_click=table_csv_counter)
+        if st.session_state.table_csv_counter == 1:
+            with st.spinner("Adding table and columns to the tool..."):
+                st.session_state.table_csv_counter = 0
+                table_table = pd.concat([table_table, pd.DataFrame({'table_name': [table_name_csv], 'table_description': [table_description_csv]})], ignore_index=True)
+                st.session_state['table_table'] = table_table
+                column_table = pd.concat([column_table, column_table_csv], ignore_index=True)
+                st.session_state['column_table'] = column_table
+                # rerun the app
+                st.experimental_rerun()
+            
+
+with tab2:
     with st.form(key='descibe_data', clear_on_submit=False):
         st.markdown("### Describe your project")
         st.markdown("Here you can define the project in few sentences if you want.")
@@ -82,7 +159,7 @@ with tab1:
             project_description = st.text_area("Describe your data", key='project_description')
         add_data_description = st.form_submit_button("Add project description", on_click=data_description_counter)
 
-with tab2:
+with tab3:
     with st.form(key='add_table', clear_on_submit=False):
         st.markdown("### Add table")
         st.markdown("Here we can define a new table and write a description about it.")
@@ -93,7 +170,7 @@ with tab2:
             table_description = st.text_area("Enter table description", key='table_description')
         add_table = st.form_submit_button("Add Table", on_click=table_session_counter)
 
-with tab3:
+with tab4:
     with st.form(key='add_column', clear_on_submit=True):
         st.markdown("### Add column to existing table")
         st.markdown("Here we can add a column to an existing table that we created before.")
@@ -106,7 +183,7 @@ with tab3:
             with col2:
                 column_description = st.text_area("Enter column description", key='column_description')
             with col3:
-                column_type = st.selectbox("Select column type", ['Select', 'int', 'float', 'string', 'date', 'datetime'], key='column_type')
+                column_type = st.selectbox("Select column type", column_type_input_list, key='column_type')
         add_column = st.form_submit_button("Add column", on_click=column_session_counter)
 
 
@@ -156,6 +233,8 @@ if st.session_state.column_session_counter == 1:
         # refresh the page to see the changes
         st.experimental_rerun()
 
+st.markdown("---")
+st.markdown("## Data description")
 st.markdown("### Tables that we have defined")
 col1, col2 = st.columns([4, 2])
 with col1:
@@ -172,7 +251,7 @@ col1, col2 = st.columns([4, 2])
 with col1:
     st.write(column_table)
 with col2:
-    column_unique_values = column_table['table_name'] + ' --- ' + column_table['column_name']
+    column_unique_values = column_table['table_name'].astype(str) + ' --- ' + column_table['column_name'].astype(str)
     with st.form(key='delete_column', clear_on_submit=True):
         st.markdown("### Delete column")
         st.markdown("Here we can delete a column that we have defined before.")
@@ -192,7 +271,7 @@ if st.session_state.column_delete_counter == 1:
     # split the unique value to get the table_name and column_name
     table_name, column_name = select_column.split(' --- ')
     # drop the row from the column_table where both of the values are the same as the selected values
-    column_table = column_table[(column_table['table_name'] != table_name) | (column_table['column_name'] != column_name)]
+    column_table = column_table[(column_table['table_name'].astype(str) != table_name) | (column_table['column_name'].astype(str) != column_name)]
     st.session_state['column_table'] = column_table
     # refresh the page to see the changes
     st.experimental_rerun()
@@ -225,7 +304,8 @@ with col1:
 st.session_state['combined_table'] = combined_table
 
 st.markdown("---")
-st.markdown("### Current tables")
+st.markdown("### Currently imported tables and columns")
+st.markdown("Here we can see the tables and columns that our tool detects as imported.")
 st.markdown("### Table table")
 st.dataframe(combined_table['table_table'])
 st.markdown("### Column table")

@@ -5,7 +5,7 @@ from utils.da_functions import *
 from PIL import Image
 
 st.set_page_config(layout='wide', page_title='Data Analysis Dashboard')
-st.title("Test Chat GPT")
+st.title("Talk with Chat GPT")
 
 # get context
 if 'full_string' not in st.session_state:
@@ -71,16 +71,34 @@ if reset_previus_conversations:
 
 if st.session_state.session_counter == 1:
     st.session_state.session_counter = 0
-    st.write("ChatGPT is thinking...")
-    # generate answer
-    response, _ = generate_answer_using_context(text_input_for_chat_gpt, context_from_other_pages, st.session_state.previus_conversations)
-    user_input_list.append(text_input_for_chat_gpt)
-    chatbot_response_list.append(response)
-     # append sessioin state list
-    st.session_state.user_input_list = user_input_list
-    st.session_state.chatbot_response_list = chatbot_response_list
+    with st.spinner('Wait for it...'):
+        # generate answer
+        response, _ = generate_answer_using_context(text_input_for_chat_gpt, context_from_other_pages, st.session_state.previus_conversations)
+        user_input_list.append(text_input_for_chat_gpt)
+        chatbot_response_list.append(response)
+        # append sessioin state list
+        st.session_state.user_input_list = user_input_list
+        st.session_state.chatbot_response_list = chatbot_response_list
 
-    # reverse the lists
+        # reverse the lists
+        user_input_list_reverse = user_input_list[::-1]
+        chatbot_response_list_reverse = chatbot_response_list[::-1]
+        for i in range(len(user_input_list)):
+            col1, col2, col3 = st.columns([1,12,1])
+            with col1:
+                st.markdown(f"**You:**")
+            with col2:
+                st.markdown(f"**{user_input_list_reverse[i]}**")
+            with col1:
+                st.markdown(f"**ChatGPT:**")
+            with col2:
+                st.markdown(f"{chatbot_response_list_reverse[i]}")
+            st.markdown("---")
+
+        st.sidebar.markdown(f"""Monitor you costs on the folowing link [here](https://platform.openai.com/account/usage)""")
+if st.session_state.session_counter == 0:
+    user_input_list = st.session_state.user_input_list
+    chatbot_response_list = st.session_state.chatbot_response_list
     user_input_list_reverse = user_input_list[::-1]
     chatbot_response_list_reverse = chatbot_response_list[::-1]
     for i in range(len(user_input_list)):
@@ -94,9 +112,4 @@ if st.session_state.session_counter == 1:
         with col2:
             st.markdown(f"{chatbot_response_list_reverse[i]}")
         st.markdown("---")
-
-    st.sidebar.markdown(f"""Monitor you costs on the folowing link [here](https://platform.openai.com/account/usage)""")
-
-    
-
 
