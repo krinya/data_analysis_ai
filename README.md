@@ -34,5 +34,5 @@ It will give you the answer. If you do not like the result you can continue the 
 
 * (The dashboard do not share this data with anyone, it is stored on your local machine for only a given session.)
 
-### 3. Ask your questions in the Chat tab.
+### 3. Ask your questions in the 'Talk with Chat GPT' page.
 * Once you have your tables defined you can ask questions in the 'Talk with Chat GPT' page. Where you ask your questions and the Chat GPT will give you the answer.
