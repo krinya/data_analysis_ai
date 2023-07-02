@@ -11,11 +11,12 @@ It helps you to give answers to your coding questions based on the data that you
 
 So for example, once you configure it, you can ask questions like:
 
-How to write an SQL query to calculate my website visitors per day?
-How to write a Python script to calculate the number of items sold per day?
-Or even more complex questions like: How to write a Python script to calculate the number of items sold per day for each country?
-Do EDA on my data using pandas and plotly express using the data that it is defined.
-And it will give you the answer. If you do not like the result you can continue the conversation with the chatbot and it will give you a new answer.
+- How to write an SQL query to calculate my website visitors per day?
+- How to write a Python script to calculate the number of items sold per day?
+- Or even more complex questions like: How to write a Python script to calculate the number of items sold per day for each country?
+- Do EDA on my data using pandas and plotly express using the data that it is defined
+
+It will give you the answer. If you do not like the result you can continue the conversation with the chatbot and it will give you a new answer.
 
 ## How to use the dashboard?
 
