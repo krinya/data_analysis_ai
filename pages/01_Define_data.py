@@ -243,7 +243,7 @@ with col2:
     with st.form(key='delete_table', clear_on_submit=True):
         st.markdown("### Delete table")
         st.markdown("Here we can delete a table that we have defined before.")
-        select_table = st.selectbox("Select table", table_table['table_name'].unique(), key='select_table_delete')
+        select_table = st.selectbox("Select table", table_table['table_name'].astype(str).unique(), key='select_table_delete')
         delete_table = st.form_submit_button("Delete table", on_click=table_delete_counter)
 
 st.markdown("### Columns that we have defined")
@@ -261,7 +261,7 @@ with col2:
 
 if st.session_state.table_delete_counter == 1:
     st.session_state.table_delete_counter = 0
-    table_table = table_table[table_table['table_name'] != select_table]
+    table_table = table_table[table_table['table_name'].astype(str) != select_table]
     st.session_state['table_table'] = table_table
     # refresh the page to see the changes
     st.experimental_rerun()
@@ -296,10 +296,10 @@ with col1:
         filename_to_use = f'{custom_filename}.pkl'
     else:
         filename_to_use = f'da_tool_export_{datetime}.pkl'
-    download_tables = st.download_button(label="Download tables",
-                                        data=pickle.dumps(combined_table),
-                                        file_name=filename_to_use,
-                                        on_click=download_tables_counter)
+    download_tables = st.download_button(label="Download table structure for later",
+                                         data=pickle.dumps(combined_table),
+                                         file_name=filename_to_use,
+                                         on_click=download_tables_counter)
     
 st.session_state['combined_table'] = combined_table
 
