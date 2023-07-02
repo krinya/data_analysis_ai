@@ -274,7 +274,7 @@ It is already a pandas dataframe and has the following columns:\n\n"""
         full_string += f"""which is {column_description}. \n\n"""
     full_string += f""" """
 
-st.text(full_string)
+#st.text(full_string)
 
 # save it to session state
 st.session_state['full_string'] = full_string
