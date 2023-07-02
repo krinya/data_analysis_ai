@@ -2,6 +2,7 @@
 ## The dasboard that helps you with your data analysis
 
 https://tablesense.streamlit.app/
+
 https://github.com/krinya/data_analysis_ai
 
 This dashboard is created to help you to wire queries and scripts. It uses Chat GPT in the backbround.
