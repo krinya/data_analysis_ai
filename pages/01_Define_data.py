@@ -81,11 +81,12 @@ if 'table_csv_counter' not in st.session_state:
 
 column_type_input_list = ['Select', 'int', 'binary', 'float', 'string', 'date', 'datetime']
 
-tab1, tab2, tab3, tab4 = st.tabs(['Upload as a CSV', 'Describe data', 'Add table', 'Add column'])
+#tab1, tab2, tab3, tab4 = st.tabs(['Using a CSV file', 'Add tables manualy', 'Add columns to existing tables manualy', 'Describe data'])
+tab1, tab2, tab3 = st.tabs(['Using a CSV file', 'Add tables manualy', 'Add columns to existing tables manualy'])
 
 with tab1:
     st.markdown("### Upload table as a CSV")
-    st.markdown("Here you can upload your data as a CSV file. Then name and select columns that you want to give for the tool.")
+    st.markdown("Here you can upload your data as a CSV file to define your table name and column structure for the chatbot.")
     col1, col2 = st.columns([2, 2])
     with col1:
         uploaded_csv_file = st.file_uploader("Choose a CSV file", type="csv")
@@ -145,24 +146,11 @@ with tab1:
                 column_table = pd.concat([column_table, column_table_csv], ignore_index=True)
                 st.session_state['column_table'] = column_table
                 # rerun the app
-                st.experimental_rerun()
-            
-
+                st.experimental_rerun()    
 with tab2:
-    with st.form(key='descibe_data', clear_on_submit=False):
-        st.markdown("### Describe your project")
-        st.markdown("Here you can define the project in few sentences if you want.")
-        col1, col2 = st.columns([2, 4])
-        with col1:
-            project_name = st.text_input("Enter database name", key='project_name')
-        with col2:
-            project_description = st.text_area("Describe your data", key='project_description')
-        add_data_description = st.form_submit_button("Add project description", on_click=data_description_counter)
-
-with tab3:
     with st.form(key='add_table', clear_on_submit=False):
         st.markdown("### Add table")
-        st.markdown("Here we can define a new table and write a description about it.")
+        st.markdown("Here you can define a new table and write a description about it for the chatbot.")
         col1, col2 = st.columns([2, 4])
         with col1:
             table_name = st.text_input("Enter table name", key='table_name')
@@ -170,7 +158,7 @@ with tab3:
             table_description = st.text_area("Enter table description", key='table_description')
         add_table = st.form_submit_button("Add Table", on_click=table_session_counter)
 
-with tab4:
+with tab3:
     with st.form(key='add_column', clear_on_submit=True):
         st.markdown("### Add column to existing table")
         st.markdown("Here we can add a column to an existing table that we created before.")
@@ -185,6 +173,17 @@ with tab4:
             with col3:
                 column_type = st.selectbox("Select column type", column_type_input_list, key='column_type')
         add_column = st.form_submit_button("Add column", on_click=column_session_counter)
+
+# with tab4:
+#     with st.form(key='descibe_data', clear_on_submit=False):
+#         st.markdown("### Describe your project")
+#         st.markdown("Here you can define the project in few sentences if you want.")
+#         col1, col2 = st.columns([2, 4])
+#         with col1:
+#             project_name = st.text_input("Enter database name", key='project_name')
+#         with col2:
+#             project_description = st.text_area("Describe your data", key='project_description')
+#         add_data_description = st.form_submit_button("Add project description", on_click=data_description_counter)
 
 
 if 'table_session_counter' not in st.session_state:

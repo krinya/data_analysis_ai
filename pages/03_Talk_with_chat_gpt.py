@@ -23,9 +23,9 @@ else:
 if context_from_other_pages == "":
     st.warning(f"""Please define the data first, because there is no context yet.""")
 
-reset_response_list = st.sidebar.button("Reset response list")
+reset_response_list = st.sidebar.button("Clear response list")
 st.sidebar.markdown("Press this if you do not want to see the previus conversations in the chat.")
-reset_previus_conversations = st.sidebar.button("Reset previus conversations")
+reset_previus_conversations = st.sidebar.button("Clear previus conversations")
 st.sidebar.markdown("Press this if you do not want to give the previus conversations as context.")
 
 def session_counter():
@@ -39,7 +39,7 @@ def session_counter():
 input_message = ""
 with st.form(key='chat_gpt_form', clear_on_submit=True):
     #st.markdown("Message")
-    text_input_for_chat_gpt = st.text_area("Enter your message or question here related to the data.", input_message, key='chat_gpt_input')
+    text_input_for_chat_gpt = st.text_area("Enter your message or question here related to the data. This will be sent to the chat bot.", input_message, key='chat_gpt_input')
     #st.markdown("Context")
     #context_input = st.text_area("Enter your context here", input_message, key='chat_gpt_context')
     submitted = st.form_submit_button("Send to ChatGPT", on_click=session_counter)
@@ -86,11 +86,13 @@ if st.session_state.session_counter == 1:
         for i in range(len(user_input_list)):
             col1, col2, col3 = st.columns([1,12,1])
             with col1:
-                st.markdown(f"**You:**")
+                st.markdown(f""":thinking_face:""" + f""" <b>You</b>""", unsafe_allow_html=True)
             with col2:
-                st.markdown(f"**{user_input_list_reverse[i]}**")
+                st.markdown(f"""
+                            *** {user_input_list_reverse[i]} ***
+                            """)
             with col1:
-                st.markdown(f"**ChatGPT:**")
+                st.markdown(f""":robot_face:""" + f"""**ChatGPT:**""", unsafe_allow_html=True)
             with col2:
                 st.markdown(f"{chatbot_response_list_reverse[i]}")
             st.markdown("---")
@@ -104,11 +106,13 @@ if st.session_state.session_counter == 0:
     for i in range(len(user_input_list)):
         col1, col2, col3 = st.columns([1,12,1])
         with col1:
-            st.markdown(f"**You:**")
+            st.markdown(f""":thinking_face:""" + f""" <b>You</b>""", unsafe_allow_html=True)
         with col2:
-            st.markdown(f"**{user_input_list_reverse[i]}**")
+            st.markdown(f"""
+                        **{user_input_list_reverse[i]}**
+                        """)
         with col1:
-            st.markdown(f"**ChatGPT:**")
+            st.markdown(f""":robot_face:""" + f"""**ChatGPT:**""", unsafe_allow_html=True)
         with col2:
             st.markdown(f"{chatbot_response_list_reverse[i]}")
         st.markdown("---")
