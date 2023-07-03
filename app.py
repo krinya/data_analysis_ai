@@ -4,8 +4,9 @@ import os
 import datetime
 import pytz
 import base64
+import streamlit.components.v1 as components
 
-st.set_page_config(layout='wide', page_title='Data Analysis Dashboard')
+st.set_page_config(layout='wide', page_title='Data Analysis Dashboard', page_icon=":robot_face:")
 
 def openai_api_key_counter():
     # st.sesson counter intialization
@@ -96,6 +97,12 @@ st.markdown("(The dashboard do not share this data with anyone, it is stored on 
 
 st.markdown("#### 3. Ask your questions in the 'Talk with Chat GPT' page.")
 st.markdown("Once you have your tables defined you can ask questions in the 'Talk with Chat GPT' page. Where you ask your questions and the Chat GPT will give you the answer.")
+
+st.markdown("#### 4. Buy me a coffee")
+st.markdown("If you like the dashboard, or I solved someting time consuming for you and you want to support me, you can buy me a coffee. It is not mandatory, but it is highly appreciated.")
+st.markdown("You can do it by clicking on the button below. Thank you!")
+components.html(f"""<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="krinya" data-color="#FF5F5F" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>""",
+                height=200)
 
 folder_path = 'pages'
 latest_date = None
